@@ -22,6 +22,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { LoginComponent } from './pages/login/login.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { environment } from 'src/environments/environment';
     MatCardModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    AngularFirestoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

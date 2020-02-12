@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
+import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,6 +9,8 @@ import { auth } from 'firebase/app';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+  user: firebase.User;
 
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
@@ -24,16 +26,15 @@ export class LoginComponent implements OnInit {
 
   @Output() submitEM = new EventEmitter();
 
-  constructor(public auth: AngularFireAuth) {
-  }
-  login() {
-    this.auth.signInWithPopup(new auth.GoogleAuthProvider());
-  }
-  logout() {
-    this.auth.signOut();
+  constructor(public userService: UserService,
+    private router: Router) {
   }
 
   ngOnInit(): void {
+  }
+
+  onLogin() {
+    this.userService.loginGoogle()
   }
 
 }

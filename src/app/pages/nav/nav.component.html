@@ -1,7 +1,8 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav
-    #drawer
+    #drawerLeft
     class="sidenav"
+    position="start"
     fixedInViewport
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
@@ -9,25 +10,65 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
+      <a mat-list-item href="#"
+        ><mat-icon>add_box</mat-icon><span>EGFR</span></a
+      >
+      <a mat-list-item href="#">
+        <mat-icon>cloud_upload</mat-icon><span>Upload Results</span>
+      </a>
+      <a mat-list-item href="#">
+        <mat-icon>search</mat-icon><span>Search Record</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav
+    #drawerRight
+    class="sidenav"
+    position="end"
+    fixedInViewport
+    role="dialog"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    opened="false"
+  >
+    <mat-toolbar>User</mat-toolbar>
+    <mat-nav-list>
       <a mat-list-item href="#">Link 1</a>
       <a mat-list-item href="#">Link 2</a>
       <a mat-list-item href="#">Link 3</a>
+      <button mat-button (click)="userService.logout()">Logout</button>
     </mat-nav-list>
   </mat-sidenav>
+
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar
+      color="primary"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
       <button
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button
-        (click)="drawer.toggle()"
+        (click)="drawerLeft.toggle()"
         *ngIf="isHandset$ | async"
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>KK</span>
-    </mat-toolbar>
 
+      <span>Kenny the Kidney</span>
+
+      <button
+        type="button"
+        aria-label="Toggle user"
+        mat-icon-button
+        (click)="drawerRight.toggle()"
+      >
+        <mat-icon aria-label="User nav toggle icon"
+          >sentiment_satisfied_alt</mat-icon
+        >
+      </button>
+    </mat-toolbar>
     <ng-content></ng-content>
   </mat-sidenav-content>
 </mat-sidenav-container>
