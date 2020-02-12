@@ -1,4 +1,7 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container
+  class="sidenav-container"
+  *ngIf="userService.user$ | async as user"
+>
   <mat-sidenav
     #drawerLeft
     class="sidenav"
@@ -10,13 +13,11 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#"
-        ><mat-icon>add_box</mat-icon><span>EGFR</span></a
-      >
-      <a mat-list-item href="#">
+      <a mat-list-item><mat-icon>add_box</mat-icon><span>EGFR</span></a>
+      <a mat-list-item>
         <mat-icon>cloud_upload</mat-icon><span>Upload Results</span>
       </a>
-      <a mat-list-item href="#">
+      <a mat-list-item>
         <mat-icon>search</mat-icon><span>Search Record</span>
       </a>
     </mat-nav-list>
@@ -32,12 +33,19 @@
     opened="false"
   >
     <mat-toolbar>User</mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item href="#">Link 1</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
+
+    <mat-card fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="50px">
+      <mat-card-title-group>
+        <mat-card-title>{{ user.displayName }}</mat-card-title>
+        <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
+      </mat-card-title-group>
+      <img matCardAvatar [src]="user.photoURL" />
+      <mat-card-content>
+        #To be continued
+        {{ user.myCustomData }}
+      </mat-card-content>
       <button mat-button (click)="userService.logout()">Logout</button>
-    </mat-nav-list>
+    </mat-card>
   </mat-sidenav>
 
   <mat-sidenav-content>
@@ -64,9 +72,11 @@
         mat-icon-button
         (click)="drawerRight.toggle()"
       >
-        <mat-icon aria-label="User nav toggle icon"
-          >sentiment_satisfied_alt</mat-icon
-        >
+        <img
+          matCardAvatar
+          [src]="user.photoURL"
+          aria-label="User nav toggle icon"
+        />
       </button>
     </mat-toolbar>
     <ng-content></ng-content>
