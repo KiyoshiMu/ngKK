@@ -1,0 +1,18 @@
+<ng-container *ngIf="home; then goHome; else goStart"></ng-container>
+<ng-template #goStart>
+  <div class="safe-area" fxLayout="column" fxLayoutAlign="center center">
+    <img
+      [src]="iconSrc"
+      class="icon"
+      *ngIf="start"
+      [@lightSpeedInOnEnter]
+      [@bounceOutLeftOnLeave]
+      [@rubberBand]="rubberState"
+    />
+  </div>
+</ng-template>
+<ng-template #goHome>
+  <app-nav>
+    <app-login></app-login>
+  </app-nav>
+</ng-template>
