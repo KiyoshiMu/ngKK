@@ -13,7 +13,12 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item><mat-icon>add_box</mat-icon><span>EGFR</span></a>
+      <a mat-list-item (click)="openBoard()"
+        ><mat-icon>apps</mat-icon><span>Dashboard</span></a
+      >
+      <a mat-list-item (click)="openEGFR()"
+        ><mat-icon>add_box</mat-icon><span>EGFR</span></a
+      >
       <a mat-list-item>
         <mat-icon>cloud_upload</mat-icon><span>Upload Results</span>
       </a>
@@ -64,7 +69,9 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
 
-      <span>Kenny the Kidney</span>
+      <a (click)="openBoard()">
+        <span>Kenny the Kidney</span>
+      </a>
 
       <button
         type="button"
@@ -79,6 +86,15 @@
         />
       </button>
     </mat-toolbar>
-    <ng-content></ng-content>
+
+    <div [ngSwitch]="board" class="board">
+      <div *ngSwitchCase="'board'">
+        <app-dashboard (selectEvent)="openEGFR()"></app-dashboard>
+      </div>
+      <div *ngSwitchCase="'egfr'">
+        <app-egfr></app-egfr>
+      </div>
+      <div *ngSwitchDefault>output2</div>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

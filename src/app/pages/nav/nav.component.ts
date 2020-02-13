@@ -11,6 +11,8 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class NavComponent {
 
+  _board = 'board';
+
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
@@ -19,5 +21,16 @@ export class NavComponent {
 
   constructor(private breakpointObserver: BreakpointObserver, public userService: UserService) { }
 
+  openEGFR() {
+    this._board = 'egfr';
+  }
+
+  openBoard() {
+    this._board = 'board';
+  }
+
+  public get board(): string {
+    return this._board
+  }
 
 }

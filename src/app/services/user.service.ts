@@ -36,7 +36,6 @@ export class UserService {
     try {
       const credential = await this.afAuth.signInWithPopup(provider);
       return this.updateUserData(credential.user);
-      this.router.navigate(['home'])
     } catch (error) {
       console.log(error);
     }

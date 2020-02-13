@@ -23,6 +23,10 @@ import { LoginComponent } from './pages/login/login.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { EgfrComponent } from './pages/board/egfr/egfr.component';
+import { DashboardComponent } from './pages/board/dashboard/dashboard.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,9 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     NavComponent,
     FormComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    EgfrComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +56,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     ReactiveFormsModule,
     FlexLayoutModule,
     AngularFirestoreModule,
+    MatGridListModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

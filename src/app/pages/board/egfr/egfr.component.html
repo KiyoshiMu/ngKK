@@ -1,0 +1,94 @@
+<form
+  [formGroup]="egfrForm"
+  novalidate
+  (ngSubmit)="onSubmit()"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  fxLayoutGap="20px"
+>
+  <h1>
+    eGFR Calculator
+  </h1>
+
+  <mat-form-field class="full-width">
+    <mat-select placeholder="Gender" formControlName="gender">
+      <mat-option *ngFor="let gender of genders" [value]="gender">
+        {{ gender }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="egfrForm.controls['gender'].hasError('required')">
+      Your gender is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-select placeholder="Race" formControlName="race">
+      <mat-option *ngFor="let race of races" [value]="race">
+        {{ race }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="egfrForm.controls['race'].hasError('required')">
+      Your race is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Age</mat-label>
+    <input
+      matInput
+      type="number"
+      placeholder="30"
+      formControlName="age"
+      min="10"
+    />
+    <span matSuffix>years</span>
+    <mat-error *ngIf="egfrForm.controls['age'].hasError('required')">
+      Your age is <strong>required</strong>
+    </mat-error>
+    <mat-error *ngIf="egfrForm.controls['age'].invalid"
+      >Age range: 1 ~ 100</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Serum Creatinine</mat-label>
+    <input
+      matInput
+      type="number"
+      placeholder="30"
+      formControlName="scr"
+      max="100"
+      min="1"
+    />
+    <span matSuffix>mg/dL</span>
+    <mat-error *ngIf="egfrForm.controls['scr'].hasError('required')">
+      Your Serum Creatinine is <strong>required</strong>
+    </mat-error>
+    <mat-error *ngIf="egfrForm.controls['scr'].invalid"
+      >Serum Creatinine range: 1 ~ 100</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Serum Cystatin C</mat-label>
+    <input
+      matInput
+      type="number"
+      placeholder="30"
+      formControlName="scys"
+      max="100"
+      min="1"
+    />
+    <span matSuffix>mg/l</span>
+    <mat-error *ngIf="egfrForm.controls['scys'].hasError('required')">
+      Your Serum Cystatin C is <strong>required</strong>
+    </mat-error>
+    <mat-error *ngIf="egfrForm.controls['scys'].invalid"
+      >Serum Cystatin C range: 1 ~ 100</mat-error
+    >
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Submit</button>
+
+  <p class="full-width">Based on CKD-EPI CREATININE-CYSTATIN EQUATION (2012)</p>
+</form>
