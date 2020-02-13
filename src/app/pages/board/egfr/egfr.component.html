@@ -41,21 +41,22 @@
   </mat-form-field>
 
   <mat-form-field class="full-width" *ngIf="!user.birthday">
-    <mat-label>Age</mat-label>
+    <mat-label>Birthday</mat-label>
     <input
       matInput
-      type="number"
-      placeholder="30"
-      formControlName="age"
-      min="10"
+      type="date"
+      formControlName="birthday"
+      min="1900-01-01"
+      max="2020-01-01"
     />
-    <span matSuffix>years</span>
-    <mat-error *ngIf="egfrForm.controls['age'].hasError('required')">
-      Your age is <strong>required</strong>
+    <mat-error *ngIf="egfrForm.controls['birthday'].hasError('required')">
+      Your birthday is <strong>required</strong>
     </mat-error>
-    <mat-error *ngIf="egfrForm.controls['age'].invalid"
-      >Age range: 1 ~ 100</mat-error
+    <mat-error
+      *ngIf="egfrForm.controls['birthday'].hasError('invalidBirthday')"
     >
+      Your birthday is <strong>invalid</strong>
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field class="full-width">
@@ -77,38 +78,6 @@
     >
   </mat-form-field>
 
-  <mat-form-field class="full-width">
-    <mat-label>Serum Cystatin C</mat-label>
-    <input
-      matInput
-      type="number"
-      placeholder="30"
-      formControlName="scys"
-      max="100"
-      min="1"
-    />
-    <span matSuffix>mg/l</span>
-    <mat-error *ngIf="egfrForm.controls['scys'].hasError('required')">
-      Your Serum Cystatin C is <strong>required</strong>
-    </mat-error>
-    <mat-error *ngIf="egfrForm.controls['scys'].invalid"
-      >Serum Cystatin C range: 1 ~ 100</mat-error
-    >
-  </mat-form-field>
-
   <button mat-raised-button color="primary" type="submit">Submit</button>
-  <p class="full-width">Based on CKD-EPI CREATININE-CYSTATIN EQUATION (2012)</p>
+  <p class="full-width">Based on MDRD study equation</p>
 </form>
-
-<mat-card *ngIf="showTip" class="tip">
-  <mat-card-header>
-    <mat-card-title>Tip</mat-card-title>
-  </mat-card-header>
-
-  <mat-card-content>
-    Update your profile first, and you'll only input your Serum Creatinine
-  </mat-card-content>
-  <mat-card-actions align="start">
-    <button mat-raised-button color="primary" type="submit">Submit</button>
-  </mat-card-actions>
-</mat-card>

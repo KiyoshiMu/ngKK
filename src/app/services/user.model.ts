@@ -9,6 +9,6 @@ export interface User {
     doctorEmail?: string;
     birthday?: number;
     age?: number;
-    race?: "Black" | "Other";
+    race?: string;
     gender?: "Female" | "Male";
 }

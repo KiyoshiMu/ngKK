@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Update Profile</h1>
+<mat-dialog-content>
+  It seems you hasn't completed your profile, do you want to update it based on
+  the form you submitted?
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button cdkFocusInitial mat-dialog-close>
+    Ok
+  </button>
+</mat-dialog-actions>

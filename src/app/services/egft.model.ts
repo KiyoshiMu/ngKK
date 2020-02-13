@@ -1,8 +1,9 @@
 export interface egfrModel {
     gender: string;
     race: string;
-    age: number;
+    age?: number;
+    birthday?: number;
     scr: number;
-    scys: number;
+    scys?: number;
     egfr?: number;
 }

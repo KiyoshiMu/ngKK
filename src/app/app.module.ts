@@ -27,6 +27,8 @@ import { DashboardComponent } from './pages/board/dashboard/dashboard.component'
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +38,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
     LoginComponent,
     EgfrComponent,
     DashboardComponent,
-    ProfileComponent
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +60,10 @@ import { ProfileComponent } from './pages/profile/profile.component';
     AngularFirestoreModule,
     MatGridListModule,
     MatMenuModule,
+    MatDialogModule,
+  ],
+  entryComponents: [
+    EgfrComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

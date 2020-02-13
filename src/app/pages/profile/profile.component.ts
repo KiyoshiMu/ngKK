@@ -35,8 +35,8 @@ export class ProfileComponent {
   ];
 
   races = [
-    'Black', 'Other'
-  ];
+    'Black-American', 'Other', 'Japanese', 'Chinese'
+  ]
 
   constructor(private fb: FormBuilder) { }
 
