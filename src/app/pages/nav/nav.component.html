@@ -10,10 +10,10 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item (click)="openBoard()"
+      <a mat-list-item (click)="switchBoard('board')"
         ><mat-icon>apps</mat-icon><span>Dashboard</span></a
       >
-      <a mat-list-item (click)="openEGFR()"
+      <a mat-list-item (click)="switchBoard('egfr')"
         ><mat-icon>add_box</mat-icon><span>EGFR</span></a
       >
       <a mat-list-item>
@@ -36,16 +36,23 @@
   >
     <mat-toolbar>User</mat-toolbar>
 
-    <mat-card fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="50px">
+    <mat-card fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
       <mat-card-title-group>
         <mat-card-title>{{ user.displayName }}</mat-card-title>
         <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
       </mat-card-title-group>
       <img matCardAvatar [src]="user.photoURL" />
-      <mat-card-content>
-        #To be continued
-        {{ user.myCustomData }}
+      <mat-card-content
+        fxLayout="column"
+        fxLayoutAlign="start center"
+        fxLayoutGap="10px"
+      >
+        <p>{{ user?.firstName }} {{ user?.lastName }}</p>
+        <p>Age: {{ age }} years</p>
+        <p>Gender: {{ user?.gender }}</p>
+        <p>Race: {{ user?.race }}</p>
       </mat-card-content>
+      <button mat-button (click)="switchBoard('profile')">Edit Profile</button>
       <button mat-button (click)="userService.logout()">Logout</button>
     </mat-card>
   </mat-sidenav>
@@ -66,7 +73,7 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
 
-      <a (click)="openBoard()">
+      <a (click)="switchBoard('board')">
         <span>Kenny the Kidney</span>
       </a>
 
@@ -86,10 +93,16 @@
 
     <div [ngSwitch]="board" class="board">
       <div *ngSwitchCase="'board'">
-        <app-dashboard (selectEvent)="openEGFR()"></app-dashboard>
+        <app-dashboard (selectEvent)="switchBoard('board')"></app-dashboard>
       </div>
       <div *ngSwitchCase="'egfr'">
-        <app-egfr (egfrEvent)="onEgfr($event)"></app-egfr>
+        <app-egfr (egfrEvent)="getEgfr($event)" [user]="user"></app-egfr>
+      </div>
+      <div *ngSwitchCase="'profile'">
+        <app-profile
+          (profileEvent)="getProfile($event)"
+          [user]="user"
+        ></app-profile>
       </div>
       <div *ngSwitchDefault>output2</div>
     </div>

@@ -7,7 +7,8 @@ import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection 
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { User } from './user.model';
-import { egfrModel } from '../pages/board/egfr/egfr.component';
+import { egfrModel } from './egft.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +56,7 @@ export class UserService {
       displayName,
       photoURL
     }
-    return userRef.set(data, { merge: true })
+    return userRef.set(data, { merge: true });
   }
 
   async logout() {
@@ -87,12 +88,17 @@ export class UserService {
       egfr,
     }
     try {
-      await collection.add(data);
+      // await collection.add(data);
+      console.log(data);
     } catch (error) {
       console.error("Error adding document: ", error);
     }
   }
-  ngOnInit(): void {
-  }
 
+  updateProfile(profile: User, uid: string) {
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`);
+
+    const data = profile
+    return userRef.update(data);
+  }
 }

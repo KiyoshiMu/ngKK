@@ -10,8 +10,16 @@
     eGFR Calculator
   </h1>
 
-  <mat-form-field class="full-width">
-    <mat-select placeholder="Gender" formControlName="gender">
+  <p *ngIf="user?.age">Age: {{ user.age }} years</p>
+  <p *ngIf="user?.gender">Gender: {{ user?.gender }}</p>
+  <p *ngIf="user?.race">Race: {{ user?.race }}</p>
+
+  <mat-form-field class="full-width" *ngIf="!user.gender">
+    <mat-select
+      [(value)]="user.gender"
+      placeholder="Gender"
+      formControlName="gender"
+    >
       <mat-option *ngFor="let gender of genders" [value]="gender">
         {{ gender }}
       </mat-option>
@@ -21,7 +29,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field class="full-width">
+  <mat-form-field class="full-width" *ngIf="!user.race">
     <mat-select placeholder="Race" formControlName="race">
       <mat-option *ngFor="let race of races" [value]="race">
         {{ race }}
@@ -32,7 +40,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field class="full-width">
+  <mat-form-field class="full-width" *ngIf="!user.birthday">
     <mat-label>Age</mat-label>
     <input
       matInput
@@ -89,6 +97,18 @@
   </mat-form-field>
 
   <button mat-raised-button color="primary" type="submit">Submit</button>
-
   <p class="full-width">Based on CKD-EPI CREATININE-CYSTATIN EQUATION (2012)</p>
 </form>
+
+<mat-card *ngIf="showTip" class="tip">
+  <mat-card-header>
+    <mat-card-title>Tip</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    Update your profile first, and you'll only input your Serum Creatinine
+  </mat-card-content>
+  <mat-card-actions align="start">
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </mat-card-actions>
+</mat-card>

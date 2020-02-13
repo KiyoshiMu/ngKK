@@ -1,14 +1,8 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { egfrModel } from 'src/app/services/egft.model';
+import { User } from 'src/app/services/user.model';
 
-export interface egfrModel {
-  gender: string;
-  race: string;
-  age: number;
-  scr: number;
-  scys: number;
-  egfr?: number;
-}
 
 @Component({
   selector: 'app-egfr',
@@ -16,8 +10,24 @@ export interface egfrModel {
   styleUrls: ['./egfr.component.scss']
 })
 export class EgfrComponent {
-
+  showTip = false;
   @Output() egfrEvent = new EventEmitter<egfrModel>();
+  _user: User;
+
+
+  @Input() set user(user: User) {
+    this._user = user;
+    if (!this.user.age
+      || !this.user.race
+      || !this.user.gender) {
+      this.showTip = true;
+    }
+    console.log(this.showTip);
+  }
+
+  get user(): User {
+    return this._user
+  }
 
   egfrForm = this.fb.group({
     gender: [null, Validators.required],
@@ -48,7 +58,8 @@ export class EgfrComponent {
     'Black', 'Other'
   ];
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {
+  }
 
   onSubmit() {
     const egfrTest = this.egfrForm.value as egfrModel

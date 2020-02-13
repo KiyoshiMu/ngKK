@@ -3,5 +3,12 @@ export interface User {
     email: string;
     photoURL?: string;
     displayName?: string;
-    myCustomData?: string;
+    firstName?: string;
+    lastName?: string;
+    doctorName?: string;
+    doctorEmail?: string;
+    birthday?: number;
+    age?: number;
+    race?: "Black" | "Other";
+    gender?: "Female" | "Male";
 }
