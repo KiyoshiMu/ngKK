@@ -3,10 +3,11 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase';
 import { Router } from '@angular/router';
 // import 'firebase/auth'
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { User } from './user.model';
+import { egfrModel } from '../pages/board/egfr/egfr.component';
 
 @Injectable({
   providedIn: 'root'
@@ -41,19 +42,20 @@ export class UserService {
     }
   }
 
-  private updateUserData(user) {
+  private updateUserData({ uid,
+    email,
+    displayName,
+    photoURL }: User) {
     // Sets user data to firestore on login
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`);
 
     const data = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL
+      uid,
+      email,
+      displayName,
+      photoURL
     }
-
     return userRef.set(data, { merge: true })
-
   }
 
   async logout() {
@@ -65,6 +67,31 @@ export class UserService {
     }
   }
 
+  async addEgfrRecord({ gender,
+    race,
+    age,
+    scr,
+    scys,
+    egfr }: egfrModel,
+    uid: string) {
+    const collection: AngularFirestoreCollection = this.afs.collection("egfrRecords");
+    const time = Date.now();
+    const data = {
+      uid,
+      time,
+      gender,
+      race,
+      age,
+      scr,
+      scys,
+      egfr,
+    }
+    try {
+      await collection.add(data);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  }
   ngOnInit(): void {
   }
 

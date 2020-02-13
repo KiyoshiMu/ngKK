@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-interface egfrModel {
+export interface egfrModel {
   gender: string;
   race: string;
   age: number;
   scr: number;
   scys: number;
+  egfr?: number;
 }
 
 @Component({
@@ -15,8 +16,10 @@ interface egfrModel {
   styleUrls: ['./egfr.component.scss']
 })
 export class EgfrComponent {
-  egfrForm = this.fb.group({
 
+  @Output() egfrEvent = new EventEmitter<egfrModel>();
+
+  egfrForm = this.fb.group({
     gender: [null, Validators.required],
     race: [null, Validators.required],
     age: [null, Validators.compose(
@@ -48,7 +51,10 @@ export class EgfrComponent {
   constructor(private fb: FormBuilder) { }
 
   onSubmit() {
-    const eGFR = this.calculator(this.egfrForm.value as egfrModel)
+    const egfrTest = this.egfrForm.value as egfrModel
+    const eGFR = this.calculator(egfrTest);
+    egfrTest.egfr = eGFR;
+    this.egfrEvent.emit(egfrTest);
     alert(`Your eGFR is ${eGFR}`);
   }
 

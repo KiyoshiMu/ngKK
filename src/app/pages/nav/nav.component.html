@@ -1,7 +1,4 @@
-<mat-sidenav-container
-  class="sidenav-container"
-  *ngIf="userService.user$ | async as user"
->
+<mat-sidenav-container class="sidenav-container" *ngIf="user">
   <mat-sidenav
     #drawerLeft
     class="sidenav"
@@ -92,7 +89,7 @@
         <app-dashboard (selectEvent)="openEGFR()"></app-dashboard>
       </div>
       <div *ngSwitchCase="'egfr'">
-        <app-egfr></app-egfr>
+        <app-egfr (egfrEvent)="onEgfr($event)"></app-egfr>
       </div>
       <div *ngSwitchDefault>output2</div>
     </div>
