@@ -16,42 +16,28 @@ export class DashboardComponent implements OnInit {
   ) { }
   @Output() selectEvent = new EventEmitter<string>();
   @Input() multi: any[];
-  show = false;
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    setTimeout(() => {
-      this.show = true;
-    }, 300);
-  }
-  /** Based on the screen size, switch from standard to one column per row */
-  cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-    map(({ matches }) => {
-      if (matches) {
-        return [
-          { title: 'eGFR', cols: 2, rows: 1 },
-          { title: 'Weight', cols: 2, rows: 1 },
-          { title: 'Nothing', cols: 2, rows: 1 },
-          { title: 'Nothing', cols: 2, rows: 1 }
-        ];
-      }
-      return [
-        { title: 'eGFR', cols: 2, rows: 1 },
-        { title: 'Weight', cols: 1, rows: 1 },
-        { title: 'Nothing', cols: 1, rows: 2 },
-        { title: 'Nothing', cols: 1, rows: 1 }
-      ];
-    })
-  );
+
+  ngOnInit(): void { }
 
   // options
-  view: any[] = [250, 200];
-  legend: boolean = false;
+  // view: any[] = [250, 200];
+  handset = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+    map(({ matches }) => {
+      if (matches) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
+    )
+  );
+  legend = this.handset;
   showLabels: boolean = true;
   animations: boolean = true;
   xAxis: boolean = false;
-  yAxis: boolean = false;
-  showYAxisLabel: boolean = false;
+  yAxis: boolean = true;
+  showYAxisLabel = this.handset;
   showXAxisLabel: boolean = false;
   xAxisLabel: string = 'Time';
   yAxisLabel: string = 'eGFR';
