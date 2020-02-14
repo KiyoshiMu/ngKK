@@ -1,5 +1,5 @@
 export interface egfrModel {
-    gender: string;
+    gender: "Female" | "Male";
     race: string;
     age?: number;
     birthday?: number;

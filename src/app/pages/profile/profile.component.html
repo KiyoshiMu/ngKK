@@ -23,7 +23,7 @@
           placeholder="Gender"
           formControlName="gender"
         >
-          <mat-option *ngFor="let gender of genders" [value]="gender">
+          <mat-option *ngFor="let gender of profile.genders" [value]="gender">
             {{ gender }}
           </mat-option>
         </mat-select>
@@ -38,7 +38,7 @@
           placeholder="Race"
           formControlName="race"
         >
-          <mat-option *ngFor="let race of races" [value]="race">
+          <mat-option *ngFor="let race of profile.races" [value]="race">
             {{ race }}
           </mat-option>
         </mat-select>

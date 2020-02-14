@@ -3,8 +3,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/services/user.model';
-import { egfrModel } from 'src/app/services/egft.model';
+import { User } from 'src/app/services/models/user.model';
+import { egfrModel } from 'src/app/services/models/egft.model';
+import { toAge } from 'src/app/services/utils/calculators';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class NavComponent {
   constructor(private breakpointObserver: BreakpointObserver, public userService: UserService) {
     this.userService.user$.subscribe(
       user => {
-        this.age = Math.floor((Date.now() - user.birthday) / 31556952000);
+        this.age = toAge(user.birthday);
         user.age = this.age;
         this.user = user;
       }

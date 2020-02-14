@@ -96,7 +96,12 @@
         <app-dashboard (selectEvent)="switchBoard('board')"></app-dashboard>
       </div>
       <div *ngSwitchCase="'egfr'">
-        <app-egfr (egfrEvent)="getEgfr($event)" [user]="user"></app-egfr>
+        <app-egfr
+          (egfrEvent)="getEgfr($event)"
+          [user]="user"
+          (userEvent)="getProfile($event)"
+          (backEvent)="switchBoard($event)"
+        ></app-egfr>
       </div>
       <div *ngSwitchCase="'profile'">
         <app-profile

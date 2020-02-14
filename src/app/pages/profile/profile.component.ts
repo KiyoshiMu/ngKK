@@ -1,14 +1,9 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
-import { FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
-import { User } from 'src/app/services/user.model';
-
-export function birthdayValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    const date = Date.parse(control.value);
-    return date < (-2208970800000) || date > (1577854800000)
-      ? { 'invalidBirthday': { value: control.value } } : null;
-  };
-}
+import { FormBuilder, Validators } from '@angular/forms';
+import { User } from 'src/app/services/models/user.model';
+import { birthdayValidator } from 'src/app/services/utils/validators';
+import { Profile } from 'src/app/services/models/profile.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile',
@@ -28,23 +23,17 @@ export class ProfileComponent {
       [Validators.required, , birthdayValidator()]]
   });
 
-  hasUnitNumber = false;
-
-  genders = [
-    'Male', 'Female'
-  ];
-
-  races = [
-    'Black-American', 'Other', 'Japanese', 'Chinese'
-  ]
-
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+    public profile: Profile,
+    private _snackBar: MatSnackBar) { }
 
   onSubmit() {
     const profile = this.profileForm.value;
     profile.birthday = Date.parse(profile.birthday);
     this.profileEvent.emit(this.profileForm.value as User);
-    alert('Thanks!');
+    this._snackBar.open('Profile Updated', 'OK', {
+      duration: 3000
+    });
   }
 
 }

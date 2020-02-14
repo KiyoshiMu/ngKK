@@ -22,12 +22,13 @@ import { LoginComponent } from './pages/login/login.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { EgfrComponent } from './pages/board/egfr/egfr.component';
+import { EgfrComponent, egfrDialog } from './pages/board/egfr/egfr.component';
 import { DashboardComponent } from './pages/board/dashboard/dashboard.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     EgfrComponent,
     DashboardComponent,
     ProfileComponent,
+    egfrDialog,
   ],
   imports: [
     BrowserModule,
@@ -61,6 +63,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatGridListModule,
     MatMenuModule,
     MatDialogModule,
+    MatSnackBarModule,
   ],
   entryComponents: [
     EgfrComponent,

@@ -1,11 +1,20 @@
-<h1 mat-dialog-title>Update Profile</h1>
-<mat-dialog-content>
-  It seems you hasn't completed your profile, do you want to update it based on
-  the form you submitted?
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button cdkFocusInitial mat-dialog-close>
-    Ok
-  </button>
-</mat-dialog-actions>
+<ng-container *ngIf="!egfrData.showTip; else updateProfile">
+  <h1 mat-dialog-title>Your eGFR: {{ egfrData.eGFR | number}}</h1>
+  <mat-dialog-content>
+    Know your body and keep in <strong>health</strong>!
+  </mat-dialog-content>
+  <button mat-button cdkFocusInitial mat-dialog-close>OK</button>
+</ng-container>
+<ng-template #updateProfile>
+  <h1 mat-dialog-title>Your eGFR: {{ egfrData.eGFR | number }}</h1>
+  <mat-dialog-content>
+    It seems you hasn't completed your profile, do you want to update it based
+    on the form you submitted?
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>No Thanks</button>
+    <button mat-button cdkFocusInitial [mat-dialog-close]="true">
+      OK
+    </button>
+  </mat-dialog-actions>
+</ng-template>

@@ -1,10 +1,27 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, Inject } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { egfrModel } from 'src/app/services/egft.model';
-import { User } from 'src/app/services/user.model';
-import { MatDialog, MatDialogRef, MatDialogActions } from '@angular/material/dialog';
-import { birthdayValidator } from '../../profile/profile.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { egfrModel } from 'src/app/services/models/egft.model';
+import { User } from 'src/app/services/models/user.model';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { birthdayValidator } from 'src/app/services/utils/validators';
+import { calculatorMDRD, toAge } from 'src/app/services/utils/calculators';
+import { Profile } from 'src/app/services/models/profile.model';
+
+interface egfrDialogData {
+  eGFR: number;
+  showTip: boolean;
+}
+
+@Component({
+  selector: 'egfr-dialog',
+  templateUrl: 'egfrDialog.html',
+})
+export class egfrDialog {
+  constructor(
+    public dialogRef: MatDialogRef<egfrDialog>,
+    @Inject(MAT_DIALOG_DATA) public egfrData: egfrDialogData) { }
+}
+
 
 @Component({
   selector: 'app-egfr',
@@ -16,6 +33,7 @@ export class EgfrComponent {
   egfrForm: FormGroup;
   @Output() egfrEvent = new EventEmitter<egfrModel>();
   @Output() userEvent = new EventEmitter<User>();
+  @Output() backEvent = new EventEmitter<string>();
   _user: User;
 
 
@@ -48,22 +66,15 @@ export class EgfrComponent {
     return this._user
   }
 
-  hasUnitNumber = false;
-
-  genders = [
-    'Male', 'Female'
-  ];
-
-  races = [
-    'Black-American', 'Other', 'Japanese', 'Chinese'
-  ];
-
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private _snackBar: MatSnackBar) {
+  constructor(private fb: FormBuilder,
+    public dialog: MatDialog,
+    public profile: Profile) {
   }
 
-  openDialog() {
-    return this.dialog.open(DialogEgfr, {
+  openDialog(egfrData: egfrDialogData) {
+    return this.dialog.open(egfrDialog, {
       width: '250px',
+      data: egfrData,
     })
       .afterClosed().toPromise()
   }
@@ -74,91 +85,22 @@ export class EgfrComponent {
       egfrTestV.birthday = Date.parse(egfrTestV.birthday)
     }
     const egfrTest = egfrTestV as egfrModel;
-    egfrTest.age = Math.floor((Date.now() - egfrTestV.birthday) / 31556952000);
-    const eGFR = this.calculator(egfrTest);
+    egfrTest.age = toAge(egfrTestV.birthday);
+    const eGFR = calculatorMDRD(egfrTest);
     egfrTest.egfr = eGFR;
     this.egfrEvent.emit(egfrTest);
 
-    this._snackBar.open(`Your eGFR is ${eGFR}`);
-
-    if (this.showTip) {
-      const result = await this.openDialog();
-      if (result) {
-        this.userEvent.emit(
-          {
-            race: egfrTest.race,
-            birthday: egfrTest.birthday,
-            gender: egfrTest.gender,
-          } as User
-        )
-      }
+    const result = await this.openDialog({ eGFR, showTip: this.showTip });
+    if (this.showTip && result) {
+      this.userEvent.emit(
+        {
+          race: egfrTest.race,
+          birthday: egfrTest.birthday,
+          gender: egfrTest.gender,
+        }
+      )
     }
-  }
-
-  private calculator({
-    gender,
-    race,
-    age,
-    scr,
-  }: egfrModel) {
-
-
-    const genderAdjust = gender === 'Female' ? 0.742 : 1
-    let raceAdjust: number;
-    switch (race) {
-      case 'Black-American':
-        raceAdjust = 1.21;
-      case 'Japanese':
-        raceAdjust = 0.763;
-      case 'Chinese':
-        raceAdjust = 1.233;
-      default:
-        raceAdjust = 1;
-        break;
-    }
-
-    const eGFR = 186 * scr ** (-1.154)
-      * age ** (-0.203)
-      * genderAdjust
-      * raceAdjust
-    return eGFR
-  }
-
-  private calculator2({
-    gender,
-    race,
-    birthday,
-    scr,
-    scys,
-  }: egfrModel) {
-    const age = Math.floor((Date.now() - birthday) / 31556952000);
-    const k = gender === 'Female' ? 0.7 : 0.9
-    const genderAdjust = gender === 'Female' ? 0.969 : 1
-    const a = gender === 'Female' ? -0.248 : -0.207
-    const raceAdjust = race == 'Black' ? 1.01 : 1;
-
-    const eGFR = 135 * (Math.min(scr / k, 1) ** a)
-      * (Math.max(scr / k, 1) ** (-0.601))
-      * (Math.min(scys / 0.8, 1) ** (-0.375))
-      * (Math.max(scys / 0.8, 1) ** (-0.711))
-      * (0.995 ** age)
-      * genderAdjust
-      * raceAdjust
-    return eGFR
+    this.backEvent.emit('board');
   }
 }
 
-@Component({
-  selector: 'egfr-dialog',
-  templateUrl: 'egfrDialog.html',
-})
-export class DialogEgfr {
-
-  constructor(
-    public dialogRef: MatDialogRef<DialogEgfr>) { }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-}

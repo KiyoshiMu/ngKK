@@ -6,8 +6,8 @@ import { Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { User } from './user.model';
-import { egfrModel } from './egft.model';
+import { User } from './models/user.model';
+import { egfrModel } from './models/egft.model';
 
 
 @Injectable({

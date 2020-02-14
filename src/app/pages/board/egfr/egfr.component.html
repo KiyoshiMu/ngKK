@@ -20,7 +20,7 @@
       placeholder="Gender"
       formControlName="gender"
     >
-      <mat-option *ngFor="let gender of genders" [value]="gender">
+      <mat-option *ngFor="let gender of profile.genders" [value]="gender">
         {{ gender }}
       </mat-option>
     </mat-select>
@@ -31,7 +31,7 @@
 
   <mat-form-field class="full-width" *ngIf="!user.race">
     <mat-select placeholder="Race" formControlName="race">
-      <mat-option *ngFor="let race of races" [value]="race">
+      <mat-option *ngFor="let race of profile.races" [value]="race">
         {{ race }}
       </mat-option>
     </mat-select>
@@ -78,6 +78,6 @@
     >
   </mat-form-field>
 
-  <button mat-raised-button color="primary" type="submit">Submit</button>
+  <button mat-raised-button color="primary" type="submit">See Result</button>
   <p class="full-width">Based on MDRD study equation</p>
 </form>
