@@ -48,9 +48,9 @@
         fxLayoutGap="10px"
       >
         <p>{{ user?.firstName }} {{ user?.lastName }}</p>
-        <p>Age: {{ age }} years</p>
-        <p>Gender: {{ user?.gender }}</p>
-        <p>Race: {{ user?.race }}</p>
+        <p *ngIf="age">Age: {{ age }} years</p>
+        <p *ngIf="user.gender">Gender: {{ user.gender }}</p>
+        <p *ngIf="user.race">Race: {{ user.race }}</p>
       </mat-card-content>
       <button mat-button (click)="switchBoard('profile')">Edit Profile</button>
       <button mat-button (click)="userService.logout()">Logout</button>
@@ -96,7 +96,6 @@
         <app-dashboard
           *ngIf="multi"
           [multi]="multi"
-          [uid]="user.uid"
           (selectEvent)="switchBoard('board')"
         ></app-dashboard>
       </div>

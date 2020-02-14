@@ -6,6 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/services/models/user.model';
 import { egfrModel } from 'src/app/services/models/egft.model';
 import { toAge } from 'src/app/services/utils/calculators';
+import { Action } from 'rxjs/internal/scheduler/Action';
 
 
 @Component({
@@ -19,29 +20,30 @@ export class NavComponent implements OnInit {
   user: User;
   age: number;
   multi: any[];
+  series = [];
   show = false;
   ngOnInit() {
     setTimeout(async () => {
 
-      this.userService.fetchEgrf(this.user.uid).subscribe(
+      this.userService.keepEgrf(this.user.uid).subscribe(
         actions => {
-          const series = [];
           actions.forEach(action => {
-            const data = action.payload.doc.data()
-            series.push({
-              "name": new Date(data.time).toLocaleString(),
+            const data = action.payload.doc.data();
+            this.series.push({
+              "name": data.time,
               "value": data.egfr
             })
           }
           );
           this.multi = [{
             "name": "eGFR",
-            "series": series
-          }],
-            console.log(this.multi);
+            "series": this.series
+          }]
+          console.log(this.multi);
         }
       )
     }, 300);
+
     setTimeout(() => {
       this.show = true;
     }, 1000);

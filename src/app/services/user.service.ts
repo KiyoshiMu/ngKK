@@ -92,17 +92,17 @@ export class UserService {
 
   updateProfile(profile: User, uid: string) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`);
-
     const data = profile
     return userRef.update(data);
   }
 
-  fetchEgrf(uid: string) {
+  keepEgrf(uid: string) {
     const docs: AngularFirestoreCollection<egfrModel> =
       this.afs.collection(
         "egfrRecords",
-        ref => ref.where("uid", "==", uid)
+        ref => ref.where("uid", "==", uid).orderBy("time")
       )
-    return docs.snapshotChanges()
+    // return docs.snapshotChanges()
+    return docs.stateChanges(['added'])
   }
 }

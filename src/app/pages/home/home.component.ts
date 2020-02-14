@@ -27,16 +27,16 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     setTimeout(() => {
       this.start = true;
-    }, 1000);
-    setTimeout(() => {
-      this.rubberState = true;
     }, 1500);
     setTimeout(() => {
+      this.rubberState = true;
+    }, 2000);
+    setTimeout(() => {
       this.start = false;
-    }, 3000);
+    }, 3500);
     setTimeout(() => {
       this.home = true;
-    }, 3500);
+    }, 4000);
     // setTimeout(() => {
     //   this.showNav = true;
     // }, 4000);
