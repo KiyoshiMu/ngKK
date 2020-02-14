@@ -91,9 +91,14 @@
       </button>
     </mat-toolbar>
 
-    <div [ngSwitch]="board" class="board">
+    <div [ngSwitch]="board" class="board" *ngIf="show">
       <div *ngSwitchCase="'board'">
-        <app-dashboard (selectEvent)="switchBoard('board')"></app-dashboard>
+        <app-dashboard
+          *ngIf="multi"
+          [multi]="multi"
+          [uid]="user.uid"
+          (selectEvent)="switchBoard('board')"
+        ></app-dashboard>
       </div>
       <div *ngSwitchCase="'egfr'">
         <app-egfr

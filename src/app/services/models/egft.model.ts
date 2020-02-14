@@ -6,4 +6,5 @@ export interface egfrModel {
     scr: number;
     scys?: number;
     egfr?: number;
+    time?: number;
 }

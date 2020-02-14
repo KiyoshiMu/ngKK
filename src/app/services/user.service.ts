@@ -68,12 +68,7 @@ export class UserService {
     }
   }
 
-  async addEgfrRecord({ gender,
-    race,
-    age,
-    scr,
-    scys,
-    egfr }: egfrModel,
+  async addEgfrRecord({ gender, race, age, scr, scys, egfr }: egfrModel,
     uid: string) {
     const collection: AngularFirestoreCollection = this.afs.collection("egfrRecords");
     const time = Date.now();
@@ -88,7 +83,7 @@ export class UserService {
       egfr,
     }
     try {
-      // await collection.add(data);
+      await collection.add(data);
       console.log(data);
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -100,5 +95,14 @@ export class UserService {
 
     const data = profile
     return userRef.update(data);
+  }
+
+  fetchEgrf(uid: string) {
+    const docs: AngularFirestoreCollection<egfrModel> =
+      this.afs.collection(
+        "egfrRecords",
+        ref => ref.where("uid", "==", uid)
+      )
+    return docs.snapshotChanges()
   }
 }

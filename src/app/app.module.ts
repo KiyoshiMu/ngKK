@@ -29,7 +29,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -64,6 +64,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatMenuModule,
     MatDialogModule,
     MatSnackBarModule,
+    NgxChartsModule,
   ],
   entryComponents: [
     EgfrComponent,
