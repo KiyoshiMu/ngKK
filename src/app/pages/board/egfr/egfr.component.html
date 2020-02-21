@@ -79,6 +79,13 @@
     >
   </mat-form-field>
 
-  <button mat-raised-button color="primary" type="submit">See Result</button>
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    [disabled]="!egfrForm.valid"
+  >
+    See Result
+  </button>
   <p class="full-width">Based on MDRD study equation</p>
 </form>

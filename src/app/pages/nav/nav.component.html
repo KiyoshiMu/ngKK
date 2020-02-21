@@ -54,9 +54,26 @@
         <p *ngIf="age">Age: {{ age }} years</p>
         <p *ngIf="user.gender">Gender: {{ user.gender }}</p>
         <p *ngIf="user.race">Race: {{ user.race }}</p>
+
+        <button mat-button (click)="switchBoard('profile')">
+          Edit Profile
+        </button>
+        <p *ngIf="user.doctorName">
+          Doctor Information:
+        </p>
+        <p *ngIf="user.doctorName">
+          {{ user.doctorName }}
+        </p>
+        <p *ngIf="user.doctorEmail">
+          {{ user.doctorEmail }}
+        </p>
+        <button mat-button (click)="doctorDialog()">
+          Edit Doctor
+        </button>
       </mat-card-content>
-      <button mat-button (click)="switchBoard('profile')">Edit Profile</button>
-      <button mat-button (click)="userService.logout()">Logout</button>
+      <button mat-button (click)="userService.logout()" color="warn">
+        Logout
+      </button>
     </mat-card>
   </mat-sidenav>
 

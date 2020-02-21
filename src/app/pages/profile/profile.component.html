@@ -70,7 +70,14 @@
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" type="submit">Update</button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!profileForm.valid"
+      >
+        Update
+      </button>
     </mat-card-actions>
   </mat-card>
 </form>

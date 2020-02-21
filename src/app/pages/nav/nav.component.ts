@@ -7,7 +7,8 @@ import { User } from 'src/app/services/models/user.model';
 import { egfrModel } from 'src/app/services/models/egft.model';
 import { toAge } from 'src/app/services/utils/calculators';
 import { Weight } from 'src/app/services/models/weight.model';
-
+import { MatDialog } from '@angular/material/dialog';
+import { DoctorDialogComponent } from '../doctor-dialog/doctor-dialog.component';
 
 @Component({
   selector: 'app-nav',
@@ -77,7 +78,8 @@ export class NavComponent implements OnInit {
     );
 
   constructor(private breakpointObserver: BreakpointObserver,
-    public userService: UserService) {
+    public userService: UserService,
+    private dialog: MatDialog) {
     this.userService.user$.subscribe(
       user => {
         this.age = toAge(user.birthday);
@@ -113,6 +115,23 @@ export class NavComponent implements OnInit {
     // console.log(profile);
     this.userService.updateProfile(
       profile, this.user.uid
+    )
+  }
+
+  doctorDialog() {
+    const doctorInfo = this.dialog.open(DoctorDialogComponent, {
+      width: '300px',
+      // data: egfrData,
+    }).afterClosed().toPromise();
+
+    doctorInfo.then(
+      info => {
+        if (info) {
+          this.userService.updateProfile(
+            info, this.user.uid
+          )
+        }
+      }
     )
   }
 }

@@ -34,6 +34,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { WeightComponent } from './pages/board/weight/weight.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
+import { DoctorDialogComponent } from './pages/doctor-dialog/doctor-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { FormsModule } from '@angular/forms';
     ProfileComponent,
     egfrDialog,
     WeightComponent,
+    DoctorDialogComponent,
   ],
   imports: [
     BrowserModule,

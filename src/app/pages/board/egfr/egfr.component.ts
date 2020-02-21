@@ -87,6 +87,10 @@ export class EgfrComponent {
     const egfrTest = egfrTestV as egfrModel;
     egfrTest.age = toAge(egfrTestV.birthday);
     const eGFR = calculatorMDRD(egfrTest);
+    if (!isFinite(eGFR)) {
+      return
+    }
+
     egfrTest.egfr = eGFR;
     this.egfrEvent.emit(egfrTest);
 
