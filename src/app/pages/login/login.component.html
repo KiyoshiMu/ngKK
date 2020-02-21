@@ -14,43 +14,14 @@
         fxLayoutAlign="center center"
         fxLayoutGap="20px"
       >
-        <form
-          [formGroup]="form"
-          (ngSubmit)="submit()"
-          fxLayout="column"
-          fxLayoutAlign="center center"
-          fxLayoutGap="20px"
-        >
-          <p>
-            <mat-form-field>
-              <input
-                type="text"
-                matInput
-                placeholder="Username"
-                formControlName="username"
-              />
-            </mat-form-field>
-          </p>
-
-          <p>
-            <mat-form-field>
-              <input
-                type="password"
-                matInput
-                placeholder="Password"
-                formControlName="password"
-              />
-            </mat-form-field>
-          </p>
-
-          <button type="submit" mat-button fxFlexAlign="end">Login</button>
-        </form>
-
-        <button
-          (click)="userService.loginGoogle()"
-          mat-button
-          fxFlexAlign="end"
-        >
+        <img
+          matCardImage
+          [src]="logo"
+          class="logo"
+          *ngIf="start"
+          [@lightSpeedInOnEnter]
+        />
+        <button (click)="userService.loginGoogle()" mat-raised-button>
           Login With Google
         </button>
       </mat-card-content>
