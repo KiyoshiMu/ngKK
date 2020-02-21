@@ -16,6 +16,9 @@
       <a mat-list-item (click)="switchBoard('egfr')"
         ><mat-icon>add_box</mat-icon><span>EGFR</span></a
       >
+      <a mat-list-item (click)="switchBoard('weight')"
+        ><mat-icon>fitness_center</mat-icon><span>Weight</span></a
+      >
       <a mat-list-item>
         <mat-icon>cloud_upload</mat-icon><span>Upload Results</span>
       </a>
@@ -92,28 +95,34 @@
     </mat-toolbar>
 
     <div [ngSwitch]="board" class="board" *ngIf="show">
-      <div *ngSwitchCase="'board'">
+      <ng-container *ngSwitchCase="'board'">
         <app-dashboard
-          *ngIf="multi"
-          [multi]="multi"
-          (selectEvent)="switchBoard('board')"
+          *ngIf="egfrs"
+          [eGFRs]="egfrs"
+          [weights]="weights"
         ></app-dashboard>
-      </div>
-      <div *ngSwitchCase="'egfr'">
+      </ng-container>
+      <ng-container *ngSwitchCase="'egfr'">
         <app-egfr
           (egfrEvent)="getEgfr($event)"
           [user]="user"
           (userEvent)="getProfile($event)"
           (backEvent)="switchBoard($event)"
         ></app-egfr>
-      </div>
-      <div *ngSwitchCase="'profile'">
+      </ng-container>
+      <ng-container *ngSwitchCase="'profile'">
         <app-profile
           (profileEvent)="getProfile($event)"
           [user]="user"
         ></app-profile>
-      </div>
-      <div *ngSwitchDefault>output2</div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'weight'">
+        <app-weight
+          (backEvent)="switchBoard($event)"
+          (weightEvent)="getWeight($event)"
+        ></app-weight>
+      </ng-container>
+      <ng-container *ngSwitchDefault>output2</ng-container>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

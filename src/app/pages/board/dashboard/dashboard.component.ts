@@ -14,9 +14,8 @@ export class DashboardComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private _snackBar: MatSnackBar
   ) { }
-  @Output() selectEvent = new EventEmitter<string>();
-  @Input() multi: any[];
-
+  @Input() eGFRs: any[];
+  @Input() weights: any[];
   ngOnInit(): void { }
 
   // options

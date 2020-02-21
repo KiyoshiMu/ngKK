@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -6,7 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/services/models/user.model';
 import { egfrModel } from 'src/app/services/models/egft.model';
 import { toAge } from 'src/app/services/utils/calculators';
-import { Action } from 'rxjs/internal/scheduler/Action';
+import { Weight } from 'src/app/services/models/weight.model';
 
 
 @Component({
@@ -19,27 +19,48 @@ export class NavComponent implements OnInit {
   _board = 'board';
   user: User;
   age: number;
-  multi: any[];
-  series = [];
+  egfrs: any[];
+  weights: any[];
+  egfrSeries = [];
+  weightSeries = [];
   show = false;
   ngOnInit() {
     setTimeout(async () => {
-
       this.userService.keepEgrf(this.user.uid).subscribe(
         actions => {
           actions.forEach(action => {
             const data = action.payload.doc.data();
-            this.series.push({
+            this.egfrSeries.push({
               "name": data.time,
               "value": data.egfr
             })
           }
           );
-          this.multi = [{
+          this.egfrs = [{
             "name": "eGFR",
-            "series": this.series
+            "series": this.egfrSeries
           }]
-          console.log(this.multi);
+          console.log(this.egfrs);
+        }
+      )
+    }, 300);
+
+    setTimeout(async () => {
+      this.userService.keepWeight(this.user.uid).subscribe(
+        actions => {
+          actions.forEach(action => {
+            const data = action.payload.doc.data();
+            this.weightSeries.push({
+              "name": data.time,
+              "value": data.weight
+            })
+          }
+          );
+          this.weights = [{
+            "name": "Weight",
+            "series": this.weightSeries
+          }]
+          console.log(this.weights);
         }
       )
     }, 300);
@@ -66,7 +87,7 @@ export class NavComponent implements OnInit {
     )
   }
 
-  switchBoard(name: 'egfr' | 'board' | "profile") {
+  switchBoard(name: string) {
     this._board = name;
   }
 
@@ -75,13 +96,21 @@ export class NavComponent implements OnInit {
   }
 
   getEgfr(egfr: egfrModel) {
+    egfr.uid = this.user.uid;
     this.userService.addEgfrRecord(
-      egfr, this.user.uid
+      egfr
+    )
+  }
+
+  getWeight(weight: Weight) {
+    weight.uid = this.user.uid;
+    this.userService.addWeight(
+      weight
     )
   }
 
   getProfile(profile: User) {
-    console.log(profile);
+    // console.log(profile);
     this.userService.updateProfile(
       profile, this.user.uid
     )

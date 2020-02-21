@@ -31,6 +31,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatTabsModule } from '@angular/material/tabs';
+import { WeightComponent } from './pages/board/weight/weight.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -42,6 +45,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     DashboardComponent,
     ProfileComponent,
     egfrDialog,
+    WeightComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +71,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatSnackBarModule,
     NgxChartsModule,
     MatTabsModule,
+    MatSliderModule,
+    FormsModule,
   ],
   entryComponents: [
     EgfrComponent,

@@ -1,0 +1,18 @@
+<div
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  fxLayoutGap="50px"
+  class="container"
+>
+  <mat-slider
+    min="0"
+    max="120"
+    step="0.5"
+    [(ngModel)]="sliderValue"
+    thumbLabel
+  ></mat-slider>
+  <p class="weight">{{ sliderValue }} KG</p>
+  <button mat-raised-button (click)="submit()" color="primary">
+    Update Weight
+  </button>
+</div>

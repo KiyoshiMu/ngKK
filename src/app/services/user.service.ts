@@ -8,6 +8,7 @@ import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { User } from './models/user.model';
 import { egfrModel } from './models/egft.model';
+import { Weight } from './models/weight.model';
 
 
 @Injectable({
@@ -68,28 +69,25 @@ export class UserService {
     }
   }
 
-  async addEgfrRecord({ gender, race, age, scr, scys, egfr }: egfrModel,
-    uid: string) {
+  async addEgfrRecord(egfr: egfrModel) {
     const collection: AngularFirestoreCollection = this.afs.collection("egfrRecords");
-    const time = Date.now();
-    const data = {
-      uid,
-      time,
-      gender,
-      race,
-      age,
-      scr,
-      scys,
-      egfr,
-    }
+    egfr.time = Date.now();
     try {
-      await collection.add(data);
-      console.log(data);
+      await collection.add(egfr);
     } catch (error) {
       console.error("Error adding document: ", error);
     }
   }
 
+  async addWeight(weight: Weight) {
+    const collection: AngularFirestoreCollection = this.afs.collection("weightRecords");
+    weight.time = Date.now();
+    try {
+      await collection.add(weight);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  }
   updateProfile(profile: User, uid: string) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`);
     const data = profile
@@ -102,7 +100,15 @@ export class UserService {
         "egfrRecords",
         ref => ref.where("uid", "==", uid).orderBy("time")
       )
-    // return docs.snapshotChanges()
+    return docs.stateChanges(['added'])
+  }
+
+  keepWeight(uid: string) {
+    const docs: AngularFirestoreCollection<Weight> =
+      this.afs.collection(
+        "weightRecords",
+        ref => ref.where("uid", "==", uid).orderBy("time")
+      )
     return docs.stateChanges(['added'])
   }
 }

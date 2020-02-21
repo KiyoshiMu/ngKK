@@ -7,4 +7,5 @@ export interface egfrModel {
     scys?: number;
     egfr?: number;
     time?: number;
+    uid?: string;
 }
