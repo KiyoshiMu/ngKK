@@ -1,9 +1,12 @@
 <h1 mat-dialog-title>Let You Doctor Know?</h1>
 <mat-dialog-content>
   <p>
-    We will send a email to your doctor. After his/her verification, when your
-    eGFR is in risk, he/she will be notified by an email including your recent
-    (1 month) weight and eGFR data.
+    We will send a email to your doctor
+    <strong>{{doctorData.doctorName}}</strong>'s email
+    <strong>{{doctorData.doctorEmail}}</strong>. After his/her verification,
+    when your eGFR is in risk, he/she will be notified by an email including
+    your recent (1 month) weight and eGFR data.
+    <strong>Please make sure the doctor's information is correct</strong>
   </p>
   <p>
     <strong>

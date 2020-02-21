@@ -9,6 +9,7 @@ import { switchMap } from 'rxjs/operators';
 import { User } from './models/user.model';
 import { egfrModel } from './models/egft.model';
 import { Weight } from './models/weight.model';
+import { Doctor } from './models/doctor.model';
 
 
 @Injectable({
@@ -90,8 +91,12 @@ export class UserService {
   }
   updateProfile(profile: User, uid: string) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`);
-    const data = profile
-    return userRef.update(data);
+    return userRef.update(profile);
+  }
+
+  updateDoctor(data: Doctor, uid: string) {
+    const doctorRef: AngularFirestoreDocument<Doctor> = this.afs.doc(`doctors/${uid}`);
+    return doctorRef.set(data);
   }
 
   keepEgrf(uid: string) {

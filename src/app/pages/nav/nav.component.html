@@ -133,7 +133,7 @@
       </ng-container>
       <ng-container *ngSwitchCase="'doctor'">
         <app-doctor
-          [uid]="user.uid"
+          [user]="user"
           (backEvent)="switchBoard($event)"
         ></app-doctor>
       </ng-container>
