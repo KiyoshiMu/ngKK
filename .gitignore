@@ -48,3 +48,4 @@ firebase*
 .*
 !*.gitignore
 *environments
+.fire*

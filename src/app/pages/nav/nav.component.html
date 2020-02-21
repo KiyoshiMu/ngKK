@@ -37,44 +37,41 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     opened="false"
   >
-    <mat-toolbar>User</mat-toolbar>
+    <mat-nav-list
+      class="profile"
+      fxLayout="column"
+      fxLayoutAlign="space-around center"
+    >
+      <img class="avatar" matCardAvatar [src]="user.photoURL" />
+      <p mat-list-item>{{ user.displayName }}</p>
+      <p mat-list-item>{{ user.email }}</p>
+      <mat-divider [inset]="true"></mat-divider>
+      <p mat-list-item>{{ user?.firstName }} {{ user?.lastName }}</p>
+      <p mat-list-item *ngIf="age">Age: {{ age }} years</p>
+      <p mat-list-item *ngIf="user.gender">Gender: {{ user.gender }}</p>
+      <p mat-list-item *ngIf="user.race">Race: {{ user.race }}</p>
 
-    <mat-card fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
-      <mat-card-title-group>
-        <mat-card-title>{{ user.displayName }}</mat-card-title>
-        <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
-      </mat-card-title-group>
-      <img matCardAvatar [src]="user.photoURL" />
-      <mat-card-content
-        fxLayout="column"
-        fxLayoutAlign="start center"
-        fxLayoutGap="10px"
-      >
-        <p>{{ user?.firstName }} {{ user?.lastName }}</p>
-        <p *ngIf="age">Age: {{ age }} years</p>
-        <p *ngIf="user.gender">Gender: {{ user.gender }}</p>
-        <p *ngIf="user.race">Race: {{ user.race }}</p>
-
-        <button mat-button (click)="switchBoard('profile')">
-          Edit Profile
-        </button>
-        <p *ngIf="user.doctorName">
-          Doctor Information:
-        </p>
-        <p *ngIf="user.doctorName">
-          {{ user.doctorName }}
-        </p>
-        <p *ngIf="user.doctorEmail">
-          {{ user.doctorEmail }}
-        </p>
-        <button mat-button (click)="doctorDialog()">
-          Edit Doctor
-        </button>
-      </mat-card-content>
+      <mat-divider [inset]="true"></mat-divider>
+      <p mat-list-item *ngIf="user.doctorName">Doctor: {{ user.doctorName }}</p>
+      <p mat-list-item *ngIf="user.doctorEmail">
+        {{ user.doctorEmail }}
+      </p>
+      <p mat-list-item *ngIf="user.doctorNotified">
+        <strong>{{
+          user.doctorVerified == true ? "Be Notified" : "Verifying"
+        }}</strong>
+      </p>
+      <mat-divider [inset]="true"></mat-divider>
+      <button mat-flat-button (click)="switchBoard('profile')" color="primary">
+        Edit Profile
+      </button>
+      <button mat-flat-button (click)="switchBoard('doctor')" color="primary">
+        Update Doctor
+      </button>
       <button mat-button (click)="userService.logout()" color="warn">
         Logout
       </button>
-    </mat-card>
+    </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content>
@@ -120,24 +117,25 @@
         ></app-dashboard>
       </ng-container>
       <ng-container *ngSwitchCase="'egfr'">
-        <app-egfr
-          (egfrEvent)="getEgfr($event)"
-          [user]="user"
-          (userEvent)="getProfile($event)"
-          (backEvent)="switchBoard($event)"
-        ></app-egfr>
+        <app-egfr [user]="user" (backEvent)="switchBoard($event)"></app-egfr>
       </ng-container>
       <ng-container *ngSwitchCase="'profile'">
         <app-profile
-          (profileEvent)="getProfile($event)"
           [user]="user"
+          (backEvent)="switchBoard($event)"
         ></app-profile>
       </ng-container>
       <ng-container *ngSwitchCase="'weight'">
         <app-weight
+          [uid]="user.uid"
           (backEvent)="switchBoard($event)"
-          (weightEvent)="getWeight($event)"
         ></app-weight>
+      </ng-container>
+      <ng-container *ngSwitchCase="'doctor'">
+        <app-doctor
+          [uid]="user.uid"
+          (backEvent)="switchBoard($event)"
+        ></app-doctor>
       </ng-container>
       <ng-container *ngSwitchDefault>output2</ng-container>
     </div>

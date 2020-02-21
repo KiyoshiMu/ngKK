@@ -7,6 +7,8 @@ export interface User {
     lastName?: string;
     doctorName?: string;
     doctorEmail?: string;
+    doctorVerified?: boolean;
+    doctorNotified?: boolean;
     birthday?: number;
     age?: number;
     race?: string;

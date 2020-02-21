@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Let You Doctor Know?</h1>
+<mat-dialog-content>
+  <p>
+    We will send a email to your doctor. After his/her verification, when your
+    eGFR is in risk, he/she will be notified by an email including your recent
+    (1 month) weight and eGFR data.
+  </p>
+  <p>
+    <strong>
+      Please don't use this function to send spam email. If you do so, you may
+      lose the right to use our App.
+    </strong>
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button cdkFocusInitial [mat-dialog-close]="true">
+    Continue
+  </button>
+</mat-dialog-actions>

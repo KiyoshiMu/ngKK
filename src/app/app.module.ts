@@ -34,7 +34,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { WeightComponent } from './pages/board/weight/weight.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
-import { DoctorDialogComponent } from './pages/doctor-dialog/doctor-dialog.component';
+import { DoctorDialogComponent, DoctorComponent } from './pages/doctor-dialog/doctor-dialog.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { DoctorDialogComponent } from './pages/doctor-dialog/doctor-dialog.compo
     egfrDialog,
     WeightComponent,
     DoctorDialogComponent,
+    DoctorComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,6 +77,7 @@ import { DoctorDialogComponent } from './pages/doctor-dialog/doctor-dialog.compo
     MatTabsModule,
     MatSliderModule,
     FormsModule,
+    MatDividerModule,
   ],
   entryComponents: [
     EgfrComponent,

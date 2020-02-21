@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Weight } from 'src/app/services/models/weight.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-weight',
@@ -8,9 +9,9 @@ import { Weight } from 'src/app/services/models/weight.model';
 })
 export class WeightComponent implements OnInit {
   sliderValue = 60;
-  constructor() { }
+  constructor(private userService: UserService) { }
   @Output() backEvent = new EventEmitter<string>();
-  @Output() weightEvent = new EventEmitter<Weight>();
+  @Input() uid: string;
 
   ngOnInit(): void {
   }
@@ -18,7 +19,12 @@ export class WeightComponent implements OnInit {
   submit() {
     console.log(this.sliderValue);
     const weight = { 'weight': this.sliderValue } as Weight;
-    this.weightEvent.emit(weight);
+
+    weight.uid = this.uid;
+    this.userService.addWeight(
+      weight
+    )
+
     this.backEvent.emit('board')
   }
 }

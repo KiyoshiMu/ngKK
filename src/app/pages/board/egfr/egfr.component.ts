@@ -6,6 +6,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { birthdayValidator } from 'src/app/services/utils/validators';
 import { calculatorMDRD, toAge } from 'src/app/services/utils/calculators';
 import { Profile } from 'src/app/services/models/profile.model';
+import { UserService } from 'src/app/services/user.service';
 
 interface egfrDialogData {
   eGFR: number;
@@ -31,11 +32,8 @@ export class egfrDialog {
 export class EgfrComponent {
   showTip = false;
   egfrForm: FormGroup;
-  @Output() egfrEvent = new EventEmitter<egfrModel>();
-  @Output() userEvent = new EventEmitter<User>();
   @Output() backEvent = new EventEmitter<string>();
   _user: User;
-
 
   @Input() set user(user: User) {
     this._user = user;
@@ -68,7 +66,8 @@ export class EgfrComponent {
 
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,
-    public profile: Profile) {
+    public profile: Profile,
+    private userService: UserService) {
   }
 
   openDialog(egfrData: egfrDialogData) {
@@ -92,19 +91,26 @@ export class EgfrComponent {
     }
 
     egfrTest.egfr = eGFR;
-    this.egfrEvent.emit(egfrTest);
-
+    this.getEgfr(egfrTest);
     const result = await this.openDialog({ eGFR, showTip: this.showTip });
     if (this.showTip && result) {
-      this.userEvent.emit(
+      this.userService.updateProfile(
         {
           race: egfrTest.race,
           birthday: egfrTest.birthday,
           gender: egfrTest.gender,
-        }
+        },
+        this.user.uid
       )
     }
     this.backEvent.emit('board');
+  }
+
+  getEgfr(egfr: egfrModel) {
+    egfr.uid = this.user.uid;
+    this.userService.addEgfrRecord(
+      egfr
+    )
   }
 }
 

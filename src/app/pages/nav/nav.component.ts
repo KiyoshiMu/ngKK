@@ -4,11 +4,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/services/models/user.model';
-import { egfrModel } from 'src/app/services/models/egft.model';
 import { toAge } from 'src/app/services/utils/calculators';
-import { Weight } from 'src/app/services/models/weight.model';
-import { MatDialog } from '@angular/material/dialog';
-import { DoctorDialogComponent } from '../doctor-dialog/doctor-dialog.component';
 
 @Component({
   selector: 'app-nav',
@@ -78,8 +74,7 @@ export class NavComponent implements OnInit {
     );
 
   constructor(private breakpointObserver: BreakpointObserver,
-    public userService: UserService,
-    private dialog: MatDialog) {
+    public userService: UserService, ) {
     this.userService.user$.subscribe(
       user => {
         this.age = toAge(user.birthday);
@@ -97,41 +92,4 @@ export class NavComponent implements OnInit {
     return this._board
   }
 
-  getEgfr(egfr: egfrModel) {
-    egfr.uid = this.user.uid;
-    this.userService.addEgfrRecord(
-      egfr
-    )
-  }
-
-  getWeight(weight: Weight) {
-    weight.uid = this.user.uid;
-    this.userService.addWeight(
-      weight
-    )
-  }
-
-  getProfile(profile: User) {
-    // console.log(profile);
-    this.userService.updateProfile(
-      profile, this.user.uid
-    )
-  }
-
-  doctorDialog() {
-    const doctorInfo = this.dialog.open(DoctorDialogComponent, {
-      width: '300px',
-      // data: egfrData,
-    }).afterClosed().toPromise();
-
-    doctorInfo.then(
-      info => {
-        if (info) {
-          this.userService.updateProfile(
-            info, this.user.uid
-          )
-        }
-      }
-    )
-  }
 }

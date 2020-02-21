@@ -4,6 +4,7 @@ import { User } from 'src/app/services/models/user.model';
 import { birthdayValidator } from 'src/app/services/utils/validators';
 import { Profile } from 'src/app/services/models/profile.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,8 +13,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ProfileComponent {
 
-  @Output() profileEvent = new EventEmitter<User>();
   @Input() user: User;
+  @Output() backEvent = new EventEmitter<string>();
+
   profileForm = this.fb.group({
     firstName: [null,],
     lastName: [null,],
@@ -25,15 +27,23 @@ export class ProfileComponent {
 
   constructor(private fb: FormBuilder,
     public profile: Profile,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar,
+    private userService: UserService) { }
 
   onSubmit() {
     const profile = this.profileForm.value;
     profile.birthday = Date.parse(profile.birthday);
-    this.profileEvent.emit(this.profileForm.value as User);
+    this.getProfile(this.profileForm.value as User);
     this._snackBar.open('Profile Updated', 'OK', {
       duration: 3000
     });
+    this.backEvent.emit('board')
   }
 
+  getProfile(profile: User) {
+    // console.log(profile);
+    this.userService.updateProfile(
+      profile, this.user.uid
+    )
+  }
 }

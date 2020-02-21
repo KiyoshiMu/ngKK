@@ -1,41 +1,79 @@
-<h1 mat-dialog-title>Add Doctor</h1>
-<mat-dialog-content>
-  <form (ngSubmit)="onSubmit()" #form="ngForm">
-    <mat-form-field>
-      <mat-label for="name">Doctor First Name</mat-label>
-      <input
-        type="text"
-        class="form-control"
-        id="name"
-        name="name"
-        required
-        matInput
-        [(ngModel)]="user.doctorName"
-      />
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label for="email">Doctor Email</mat-label>
-      <input
-        type="email"
-        class="form-control"
-        id="email"
-        required
-        matInput
-        name="email"
-        [(ngModel)]="user.doctorEmail"
-      />
-    </mat-form-field>
-
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="!form.form.valid"
+<form
+  (ngSubmit)="onSubmit(form.value)"
+  #form="ngForm"
+  fxLayout="column"
+  fxLayoutAlign="space-around center"
+>
+  <h1>Update My Doctor</h1>
+  <p>When you are in risk, let your doctor be notified!</p>
+  <mat-form-field class="full-width">
+    <mat-label for="name">Doctor First Name</mat-label>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      name="name"
+      required
+      matInput
+      ngModel
+    />
+    <mat-error *ngIf="form.controls['name']?.hasError('required')">
+      The doctor name is <strong>required</strong></mat-error
     >
-      Add Doctor
-    </button>
-  </form>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancel</button>
-</mat-dialog-actions>
+  </mat-form-field>
+  <mat-error></mat-error>
+  <mat-form-field class="full-width">
+    <mat-label for="email">Doctor Email</mat-label>
+    <input
+      type="email"
+      class="form-control"
+      id="email"
+      required
+      email
+      matInput
+      name="email"
+      ngModel
+    />
+    <mat-error *ngIf="form.controls['email']?.hasError('required')">
+      The doctor email is <strong>required</strong></mat-error
+    >
+    <mat-error
+      *ngIf="
+        form.controls['email']?.hasError('email') &&
+        !form.controls['email']?.hasError('required')
+      "
+    >
+      The doctor email is <strong>required</strong></mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label for="message">Message</mat-label>
+    <textarea
+      matInput
+      #message
+      maxlength="256"
+      name="message"
+      id="message"
+      placeholder="Ex. I am..."
+      ngModel
+    >
+    </textarea>
+    <mat-hint align="start"
+      ><strong>Let the doctor know it's you</strong>
+    </mat-hint>
+    <mat-hint align="end">{{ message.value.length }} / 256</mat-hint>
+    <mat-error *ngIf="form.controls['message']?.hasError('maxlength')">
+      Your message is <strong>too long</strong></mat-error
+    >
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    [disabled]="!form.form.valid"
+  >
+    Add Doctor
+  </button>
+</form>
