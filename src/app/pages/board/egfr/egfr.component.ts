@@ -7,9 +7,11 @@ import { birthdayValidator } from 'src/app/services/utils/validators';
 import { calculatorMDRD, toAge } from 'src/app/services/utils/calculators';
 import { Profile } from 'src/app/services/models/profile.model';
 import { UserService } from 'src/app/services/user.service';
+import { HttpClient } from '@angular/common/http';
 
 interface egfrDialogData {
   eGFR: number;
+  comment: string;
   showTip: boolean;
 }
 
@@ -51,11 +53,11 @@ export class EgfrComponent {
       scr: [null,
         Validators.compose(
           [Validators.required,
-          Validators.min(1),
-          Validators.max(100)])],
+          Validators.min(0),
+          Validators.max(50)])],
       scys: [null,
-        [Validators.min(1),
-        Validators.max(100)]],
+        [Validators.min(0),
+        Validators.max(50)]],
     });
 
   }
@@ -67,15 +69,8 @@ export class EgfrComponent {
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,
     public profile: Profile,
-    private userService: UserService) {
-  }
-
-  openDialog(egfrData: egfrDialogData) {
-    return this.dialog.open(egfrDialog, {
-      width: '250px',
-      data: egfrData,
-    })
-      .afterClosed().toPromise()
+    private userService: UserService,
+    private http: HttpClient) {
   }
 
   async onSubmit() {
@@ -91,8 +86,14 @@ export class EgfrComponent {
     }
 
     egfrTest.egfr = eGFR;
+    const comment = this.checkNormal(eGFR);
+    console.log(comment);
     this.getEgfr(egfrTest);
-    const result = await this.openDialog({ eGFR, showTip: this.showTip });
+    const result = await this.dialog.open(egfrDialog, {
+      width: '250px',
+      data: { eGFR, comment, showTip: this.showTip },
+    }).afterClosed().toPromise()
+
     if (this.showTip && result) {
       this.userService.updateProfile(
         {
@@ -111,6 +112,37 @@ export class EgfrComponent {
     this.userService.addEgfrRecord(
       egfr
     )
+  }
+
+  readonly normalBins = [90, 60, 45, 30, 15]
+  readonly labels = [
+    'Normal or high',
+    "Mildly decreased",
+    'Mildly to moderately decreased',
+    'Moderately to severely decreased',
+    'Severely decreased',
+    'Kidney failure'
+  ]
+  checkNormal(eGFR: number) {
+    for (let index = 0; index < this.normalBins.length; index++) {
+      const element = this.normalBins[index];
+      if (eGFR > element) {
+        const comment = this.labels[index];
+        return comment;
+      }
+    }
+    const comment = this.labels[this.normalBins.length];
+    return comment;
+
+  }
+
+  notifyDoctor(comment: string) {
+    if (!comment.includes('Normal') && this.user.doctorVerified) {
+      this.http.post(
+        `https://us-central1-predmeal.cloudfunctions.net/notifyDoctor?email=${this.user.doctorEmail}`,
+        comment
+      )
+    }
   }
 }
 

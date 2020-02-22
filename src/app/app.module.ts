@@ -36,6 +36,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
 import { DoctorDialogComponent, DoctorComponent } from './pages/doctor-dialog/doctor-dialog.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatSliderModule,
     FormsModule,
     MatDividerModule,
+    HttpClientModule,
   ],
   entryComponents: [
     EgfrComponent,

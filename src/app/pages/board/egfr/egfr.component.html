@@ -64,17 +64,21 @@
     <input
       matInput
       type="number"
-      placeholder="30"
+      placeholder="1"
       formControlName="scr"
-      max="100"
-      min="1"
+      max="50"
+      min="0"
     />
     <span matSuffix>mg/dL</span>
     <mat-error *ngIf="egfrForm.controls['scr'].hasError('required')">
       Your Serum Creatinine is <strong>required</strong>
     </mat-error>
-    <mat-error *ngIf="egfrForm.controls['scr'].invalid"
-      >Serum Creatinine range: 1 ~ 100</mat-error
+    <mat-error
+      *ngIf="
+        !egfrForm.controls['scr'].hasError('required') &&
+        egfrForm.controls['scr'].invalid
+      "
+      >Serum Creatinine range: 0 ~ 50</mat-error
     >
   </mat-form-field>
 
