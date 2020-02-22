@@ -86,12 +86,12 @@ export class EgfrComponent {
     }
 
     egfrTest.egfr = eGFR;
-    const comment = this.checkNormal(eGFR);
-    console.log(comment);
+    const label = this.checkNormal(eGFR);
+    console.log(label);
     this.getEgfr(egfrTest);
     const result = await this.dialog.open(egfrDialog, {
       width: '250px',
-      data: { eGFR, comment, showTip: this.showTip },
+      data: { eGFR, label, showTip: this.showTip },
     }).afterClosed().toPromise()
 
     if (this.showTip && result) {
@@ -116,31 +116,40 @@ export class EgfrComponent {
 
   readonly normalBins = [90, 60, 45, 30, 15]
   readonly labels = [
-    'Normal or high',
-    "Mildly decreased",
-    'Mildly to moderately decreased',
-    'Moderately to severely decreased',
-    'Severely decreased',
+    'Kidney function normal or high',
+    "Kidney function mildly decreased",
+    'Kidney function mildly to moderately decreased',
+    'Kidney function moderately to severely decreased',
+    'Kidney function severely decreased',
     'Kidney failure'
   ]
   checkNormal(eGFR: number) {
+    let label: string;
+    let count: number;
     for (let index = 0; index < this.normalBins.length; index++) {
       const element = this.normalBins[index];
       if (eGFR > element) {
-        const comment = this.labels[index];
-        return comment;
+        label = this.labels[index];
+        count = index;
+        break
       }
     }
-    const comment = this.labels[this.normalBins.length];
-    return comment;
+    if (!label) {
+      label = this.labels[this.normalBins.length];
+      count = this.normalBins.length;
+    }
+    if (count > 2) {
+      this.notifyDoctor(count - 3)
+    }
+
+    return label;
 
   }
 
-  notifyDoctor(comment: string) {
-    if (!comment.includes('Normal') && this.user.doctorVerified) {
-      this.http.post(
-        `https://us-central1-predmeal.cloudfunctions.net/notifyDoctor?email=${this.user.doctorEmail}`,
-        comment
+  notifyDoctor(idx: number) {
+    if (this.user.doctorVerified && this.user.doctorNotified) {
+      this.http.get(
+        `https://us-central1-predmeal.cloudfunctions.net/notifyDoctor?uid=${this.user.uid}&idx=${idx}`,
       )
     }
   }
