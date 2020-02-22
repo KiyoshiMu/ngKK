@@ -44,7 +44,7 @@ export class DoctorComponent implements OnInit {
             {
               'doctorEmail': values.email,
               'doctorName': values.name,
-              'patientFirstName': this.user.firstName,
+              'patientName': this.user.firstName,
               'message': values.message,
             }
           )

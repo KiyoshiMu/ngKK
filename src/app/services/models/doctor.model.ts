@@ -1,6 +1,6 @@
 export interface Doctor {
     doctorName: string;
     doctorEmail: string;
-    patientFirstName?: string;
+    patientName?: string;
     message?: string;
 }

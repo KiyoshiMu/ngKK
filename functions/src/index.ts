@@ -1,30 +1,40 @@
-// import * as functions from 'firebase-functions';
-// import * as admin  from 'firebase-admin';
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 import * as nodemailer from 'nodemailer'
 //
 // export const helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
+interface Email {
+	doctorEmail: string,
+	doctorName: string,
+	patientName: string,
+	verifyLink: string,
+	extra: string,
+}
+
+admin.initializeApp();
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'kennythekidneymsg@gmail.com',
-        pass: 'myq722150'
-    }
+	service: 'gmail',
+	auth: {
+		user: 'kennythekidneymsg@gmail.com',
+		pass: 'myq722150'
+	}
 });
 
 function sendEmail(
-    doctorEmail: string,
-    doctorName: string,
-    patientName: string,
-    verifyLink: string,
+	{ doctorEmail,
+		doctorName,
+		patientName,
+		verifyLink,
+		extra }: Email
 ) {
 
-    const mailOptions = {
-        from: 'Kenny the Kidney <kennythekidneymsg@gmail.com>',
-        to: doctorEmail,
-        subject: 'DoNotReply-PatientVerification',
-        html: `
+	const mailOptions = {
+		from: 'Kenny the Kidney <kennythekidneymsg@gmail.com>',
+		to: doctorEmail,
+		subject: 'DoNotReply-PatientVerification',
+		html: `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
@@ -241,7 +251,7 @@ function sendEmail(
 <div style="line-height: 1.5; font-size: 12px; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; color: #555555; mso-line-height-alt: 18px;">
 <p style="font-size: 16px; line-height: 1.5; word-break: break-word; text-align: left; font-family: inherit; mso-line-height-alt: 24px; margin: 0;"><span style="font-size: 16px; color: #2a272b;">Hi Dr. ${doctorName}</span></p>
 <p style="font-size: 12px; line-height: 1.5; word-break: break-word; text-align: left; font-family: inherit; mso-line-height-alt: 18px; margin: 0;"> </p>
-<p style="line-height: 1.5; word-break: break-word; text-align: left; font-family: inherit; mso-line-height-alt: NaNpx; margin: 0;"><span style="color: #2a272b;"><span style="font-size: 16px;">The patient ${patientName} has added you as the eGFR risk notification receiver. If you know this patient and want to receive the notification send from us, Kenny the Kidney, please verify the patient by the following link.</span></span></p>
+<p style="line-height: 1.5; word-break: break-word; text-align: left; font-family: inherit; mso-line-height-alt: NaNpx; margin: 0;"><span style="color: #2a272b;"><span style="font-size: 16px;">The patient ${patientName} has added you as the eGFR risk notification receiver. ${extra}If you know this patient and want to receive the notification send from us, Kenny the Kidney, please verify the patient by the following link.</span></span></p>
 <p style="line-height: 1.5; word-break: break-word; text-align: left; font-family: inherit; mso-line-height-alt: NaNpx; margin: 0;"> </p>
 <p style="line-height: 1.5; word-break: break-word; text-align: left; font-family: inherit; mso-line-height-alt: NaNpx; margin: 0;"><span style="color: #2a272b;"><span style="font-size: 16px;">Otherwise, please ignore this email.</span></span></p>
 <p style="line-height: 1.5; word-break: break-word; text-align: left; font-family: inherit; mso-line-height-alt: NaNpx; margin: 0;"> </p>
@@ -361,26 +371,51 @@ function sendEmail(
 <!--[if (IE)]></div><![endif]-->
 </body>
 </html>
-        ` // email content in HTML
-    };
+        `
+	};
 
-    // returning result
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error.toString());
-        }
-        console.log('Sended');
-    });
+	// returning result
+	transporter.sendMail(mailOptions, (error, info) => {
+		if (error) {
+			console.log(error.toString());
+		}
+		console.log('Sended');
+	});
 };
 
+exports.verifyPatient = functions.https.onRequest(async (req, res) => {
+	const uid = req.query.uid;
+	const updateResult = await admin.firestore().doc(`users/${uid}`).update(
+		{ 'doctorVerified': true }
+	)
+	if (updateResult) {
+		res.send(
+			'<h1>You will get notification when your patient is in risk eGRF</h1>')
+	}
+	else {
+		res.status(500).send({ error: 'something blew up' })
+	}
+});
 
-// exports.monitorWrite = functions.firestore
-//     .document('doctors/{userId}')
-//     .onCreate(async (snapshot, context) => {
-//         console.log('Uid', context.params.userId);
-//         const ref = await snapshot.ref.get();
-//         console.log(ref.data());
+exports.monitorWrite = functions.firestore
+	.document('doctors/{userId}')
+	.onCreate(async (snapshot, context) => {
 
-//     });
+		const ref = await snapshot.ref.get();
+		const data = ref.data();
+		const link = `https://us-central1-predmeal.cloudfunctions.net/verifyPatient?uid=${context.params.userId}`;
+		if (data) {
+			sendEmail(
+				{
+					doctorEmail: data.doctorEmail,
+					doctorName: data.doctorName,
+					verifyLink: link,
+					patientName: data.patientName,
+					extra: data.message ? `The message from ${data.patientName} is ${data.message}` : ''
+				}
+			)
+		}
+
+	});
 
 // sendEmail()
