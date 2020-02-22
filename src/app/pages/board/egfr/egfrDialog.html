@@ -1,7 +1,7 @@
 <ng-container *ngIf="!egfrData.showTip; else updateProfile">
   <h1 mat-dialog-title>Your eGFR: {{ egfrData.eGFR | number}}</h1>
   <mat-dialog-content>
-    Your conditions is <strong>{{ egfrData.comment }}</strong>.
+    Your conditions is <strong>{{ egfrData.label }}</strong>.
   </mat-dialog-content>
   <button mat-button cdkFocusInitial mat-dialog-close>OK</button>
 </ng-container>

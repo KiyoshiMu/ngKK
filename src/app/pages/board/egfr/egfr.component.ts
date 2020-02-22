@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 
 interface egfrDialogData {
   eGFR: number;
-  comment: string;
+  label: string;
   showTip: boolean;
 }
 
@@ -87,7 +87,7 @@ export class EgfrComponent {
 
     egfrTest.egfr = eGFR;
     const label = this.checkNormal(eGFR);
-    console.log(label);
+
     this.getEgfr(egfrTest);
     const result = await this.dialog.open(egfrDialog, {
       width: '250px',
@@ -141,7 +141,6 @@ export class EgfrComponent {
     if (count > 2) {
       this.notifyDoctor(count - 3)
     }
-
     return label;
 
   }
@@ -150,6 +149,8 @@ export class EgfrComponent {
     if (this.user.doctorVerified && this.user.doctorNotified) {
       this.http.get(
         `https://us-central1-predmeal.cloudfunctions.net/notifyDoctor?uid=${this.user.uid}&idx=${idx}`,
+      ).subscribe(
+        info => console.log(info)
       )
     }
   }

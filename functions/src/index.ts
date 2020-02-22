@@ -58,13 +58,15 @@ exports.verifyPatient = functions.https.onRequest(async (req, res) => {
 	)
 	if (updateResult) {
 		res.send(
-			fs.readFileSync('confirm.html', 'utf8')
+			fs.readFileSync('notify.html', 'utf8')
 				.replace('${content}',
 					'You will get notification when your patient is in risk eGRF'
 				)
 				.replace('${comment}',
 					"This is to confirm your verification."
 				)
+				.replace('${src}',
+					'https://i.ibb.co/6rJDCY3/confirm.png')
 		);
 
 		const patientProfile = (await admin.firestore().doc(`users/${uid}`).get()).data();
@@ -79,6 +81,7 @@ exports.verifyPatient = functions.https.onRequest(async (req, res) => {
 				html: fs.readFileSync('notify.html', 'utf8')
 					.replace('${content}', content)
 					.replace('${comment}', comment)
+					.replace('${src}', 'https://i.ibb.co/6rJDCY3/confirm.png')
 			};
 			transporter.sendMail(mailOptions, (error, info) => {
 				if (error) {
@@ -114,16 +117,18 @@ exports.monitorWrite = functions.firestore
 
 exports.notifyDoctor = functions.https.onRequest(async (req, res) => {
 	const labels = [
-		'Kidney moderately to severely decreased',
-		'Kidney severely decreased',
+		'Kidney function moderately to severely decreased',
+		'Kidney function severely decreased',
 		'Kidney failure'
 	]
 	const idx = req.query.idx;
 	const uid = req.query.uid;
+	const renderData = await dataRender(uid);
 	const patientProfile = (await admin.firestore().doc(`users/${uid}`).get()).data();
 	if (patientProfile) {
 		const content = `Hi Dr.${patientProfile.doctorName}, your patient ${patientProfile.firstName}'s 
-		recent eGFR shows this patient has <strong>${labels[idx]}</strong>.
+		recent eGFR shows this patient has <strong>${labels[idx]}</strong>. 
+		<a href='${renderData.chartSrc}'>See Chart</a> with the eGFR records attached	  
 		`;
 		const comment = "This email is to notify your patient's risk condition.";
 		const mailOptions = {
@@ -133,6 +138,12 @@ exports.notifyDoctor = functions.https.onRequest(async (req, res) => {
 			html: fs.readFileSync('notify.html', 'utf8')
 				.replace('${content}', content)
 				.replace('${comment}', comment)
+				.replace('${src}', 'https://i.ibb.co/8N5bWZn/sad.png'),
+			attachments: [
+				{   // utf-8 string as an attachment
+					filename: `${patientProfile.firstName}.csv`,
+					content: renderData.csvContent,
+				}],
 		};
 
 		// returning result
@@ -149,6 +160,42 @@ exports.notifyDoctor = functions.https.onRequest(async (req, res) => {
 		res.json({ status: 'cannot find patientProfile' })
 	}
 })
+
+async function dataRender(uid: string) {
+	const docs = await admin.firestore()
+		.collection('egfrRecords')
+		.where("uid", "==", uid)
+		.orderBy("time")
+		.limit(30)
+		.get();
+	const csvContent = ['time,eGFR'];
+	const labels: string[] = [];
+	const data: number[] = [];
+	docs.forEach(doc => {
+		const data_ = doc.data();
+		const time = new Date(data_.time).toLocaleString()
+		labels.push(time);
+		data.push(data_.egfr);
+		csvContent.push(`${time},${data_.egfr}`)
+	})
+	const c = JSON.stringify({
+		type: 'line',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: 'eGFR', data: data,
+				backgroundColor: 'rgba(225, 225, 225, 1)'
+			}]
+		}
+	})
+
+	const chartSrc = `https://quickchart.io/chart?c=${c}`;
+	console.log('docs', chartSrc)
+	return {
+		chartSrc: chartSrc,
+		csvContent: csvContent.join('\n')
+	}
+}
 
 // sendEmail({
 // 	'doctorEmail': 'mooyewtsing@gmail.com',

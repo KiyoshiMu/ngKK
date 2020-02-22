@@ -37,7 +37,7 @@ export class NavComponent implements OnInit {
             "name": "eGFR",
             "series": this.egfrSeries
           }]
-          console.log(this.egfrs);
+          // console.log(this.egfrs);
         }
       )
     }, 300);
@@ -57,7 +57,7 @@ export class NavComponent implements OnInit {
             "name": "Weight",
             "series": this.weightSeries
           }]
-          console.log(this.weights);
+          // console.log(this.weights);
         }
       )
     }, 300);
