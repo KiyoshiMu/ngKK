@@ -22,8 +22,8 @@
       <a mat-list-item>
         <mat-icon>cloud_upload</mat-icon><span>Upload Results</span>
       </a>
-      <a mat-list-item>
-        <mat-icon>search</mat-icon><span>Search Record</span>
+      <a mat-list-item (click)="switchBoard('edu')">
+        <mat-icon>search</mat-icon><span>Education</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
@@ -136,6 +136,10 @@
           [user]="user"
           (backEvent)="switchBoard($event)"
         ></app-doctor>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'edu'">
+        <app-edu></app-edu>
       </ng-container>
       <ng-container *ngSwitchDefault>output2</ng-container>
     </div>

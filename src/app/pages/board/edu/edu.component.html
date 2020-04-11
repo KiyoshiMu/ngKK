@@ -1,0 +1,32 @@
+<!-- <mat-card class="card" *ngFor="let doc of docs">
+  <mat-card-header>
+    <mat-card-title>{{ doc.name }}</mat-card-title>
+  </mat-card-header>
+  <img
+    matCardImage
+    src="https://zapier.cachefly.net/storage/photos/b4a925f6c39483a70247b87031d0f67c.png"
+  />
+
+  <mat-card-actions>
+    <a [href]="doc.url">
+      <button mat-button>Download</button>
+    </a>
+  </mat-card-actions>
+</mat-card> -->
+
+<mat-grid-list
+  cols="2"
+  rowHeight="fit"
+  [style.height]="'100px'"
+  [gutterSize]="'1px'"
+>
+  <mat-grid-tile [colspan]="1" [rowspan]="1" *ngFor="let doc of docs">
+    <mat-grid-tile-footer>{{ doc.name }}</mat-grid-tile-footer>
+    <img
+      src="https://zapier.cachefly.net/storage/photos/b4a925f6c39483a70247b87031d0f67c.png"
+    />
+    <a [href]="doc.url">
+      <button mat-flat-button>Download</button>
+    </a>
+  </mat-grid-tile>
+</mat-grid-list>

@@ -37,6 +37,7 @@ import { FormsModule } from '@angular/forms';
 import { DoctorDialogComponent, DoctorComponent } from './pages/doctor-dialog/doctor-dialog.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { HttpClientModule } from '@angular/common/http';
+import { EduComponent } from './pages/board/edu/edu.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { HttpClientModule } from '@angular/common/http';
     WeightComponent,
     DoctorDialogComponent,
     DoctorComponent,
+    EduComponent,
   ],
   imports: [
     BrowserModule,
