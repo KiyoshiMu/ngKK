@@ -2,11 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as nodemailer from 'nodemailer';
 import * as fs from 'fs';
-// import * as path from 'path';
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+
 interface Email {
 	doctorEmail: string,
 	doctorName: string,
@@ -43,11 +39,11 @@ function sendEmail(
 	};
 
 	// returning result
-	transporter.sendMail(mailOptions, (error, info) => {
+	transporter.sendMail(mailOptions, (error, _) => {
 		if (error) {
-			console.log(error.toString());
+			functions.logger.log(error.toString());
 		}
-		console.log('Sended');
+		functions.logger.log('Sended');
 	});
 };
 
@@ -85,9 +81,9 @@ exports.verifyPatient = functions.https.onRequest(async (req, res) => {
 			};
 			transporter.sendMail(mailOptions, (error, info) => {
 				if (error) {
-					console.log(error.toString());
+					functions.logger.log(error.toString());
 				}
-				console.log('Sended');
+				functions.logger.log('Sended');
 			});
 		}
 	}
@@ -102,6 +98,7 @@ exports.monitorWrite = functions.firestore
 		const ref = await snapshot.ref.get();
 		const data = ref.data();
 		const link = `https://us-central1-predmeal.cloudfunctions.net/verifyPatient?uid=${context.params.userId}`;
+		functions.logger.log("Add new doctor")
 		if (data) {
 			sendEmail(
 				{
@@ -121,13 +118,13 @@ exports.notifyDoctor = functions.https.onRequest(async (req, res) => {
 		'Kidney function severely decreased',
 		'Kidney failure'
 	]
-	const idx = req.query.idx;
-	const uid = req.query.uid;
+	const idx = req.query.idx as string;
+	const uid = req.query.uid as string;
 	const renderData = await dataRender(uid);
 	const patientProfile = (await admin.firestore().doc(`users/${uid}`).get()).data();
 	if (patientProfile) {
 		const content = `Hi Dr.${patientProfile.doctorName}, your patient ${patientProfile.firstName}'s 
-		recent eGFR shows this patient has <strong>${labels[idx]}</strong>. 
+		recent eGFR shows this patient has <strong>${labels[parseInt(idx)]}</strong>. 
 		<a href='${renderData.chartSrc}'>See Chart</a> with the eGFR records attached	  
 		`;
 		const comment = "This email is to notify your patient's risk condition.";
@@ -149,10 +146,10 @@ exports.notifyDoctor = functions.https.onRequest(async (req, res) => {
 		// returning result
 		transporter.sendMail(mailOptions, (error, info) => {
 			if (error) {
-				console.log(error.toString());
+				functions.logger.log(error.toString());
 				res.json({ error: error.toString() })
 			}
-			console.log('Sended');
+			functions.logger.log('Sended');
 			res.json({ status: 'Sended' })
 		});
 	}
@@ -190,7 +187,7 @@ async function dataRender(uid: string) {
 	})
 
 	const chartSrc = `https://quickchart.io/chart?c=${c}`;
-	console.log('docs', chartSrc)
+	functions.logger.log('docs', chartSrc)
 	return {
 		chartSrc: chartSrc,
 		csvContent: csvContent.join('\n')

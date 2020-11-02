@@ -35,7 +35,6 @@ export class UserService {
   }
 
   async loginGoogle() {
-    // await auth().setPersistence(auth.Auth.Persistence.LOCAL);
     const provider = new auth.GoogleAuthProvider();
     try {
       const credential = await this.afAuth.signInWithPopup(provider);

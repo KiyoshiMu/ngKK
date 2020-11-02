@@ -48,6 +48,9 @@ export class DoctorComponent implements OnInit {
               'message': values.message,
             }
           )
+          this._snackBar.open('Doctor Updated', 'OK', {
+            duration: 3000
+          });
         }
         else {
           this.getProfile({
@@ -56,10 +59,10 @@ export class DoctorComponent implements OnInit {
             'doctorNotified': false,
             'doctorVerified': false,
           })
+          this._snackBar.open('Canceled', 'OK', {
+            duration: 3000
+          });
         }
-        this._snackBar.open('Doctor Updated', 'OK', {
-          duration: 3000
-        });
       }
     )
 

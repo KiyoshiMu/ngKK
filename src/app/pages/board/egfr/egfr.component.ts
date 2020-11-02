@@ -146,7 +146,8 @@ export class EgfrComponent {
   }
 
   notifyDoctor(idx: number) {
-    if (this.user.doctorVerified && this.user.doctorNotified) {
+    if (this.user.doctorVerified) {
+      console.log("notify doctor")
       this.http.get(
         `https://us-central1-predmeal.cloudfunctions.net/notifyDoctor?uid=${this.user.uid}&idx=${idx}`,
       ).subscribe(
